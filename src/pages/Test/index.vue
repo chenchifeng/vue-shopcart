@@ -11,11 +11,27 @@
 								<el-table-column prop="price" label="金额"></el-table-column>
 								<el-table-column label="操作">
 									<template slot-scope="scope">
-										<el-button type="text" size="small">删除</el-button>
-										<el-button type="text" size="small">增加</el-button>
+										<el-button type="text" size="small"  
+											@click="delGoods(scope.row)">
+											删除
+										</el-button>
+										<el-button type="text" size="small" 
+											@click="addOrderList(scope.row)">
+											增加
+										</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
+							<div>
+								<label> 数量： {{ totalCount }} </label>
+								<span> 金额 ：{{ totalMoney }} </span>
+							</div>
+							<div>
+								<el-button type="primary" 
+									@click="payMoney()" round>
+									主要按钮
+								</el-button>
+							</div>
 						</el-tab-pane>
 						<el-tab-pane label="外卖">外卖</el-tab-pane>
 						<el-tab-pane label="自取">自取</el-tab-pane>
@@ -26,7 +42,7 @@
 						<div class="title">日常商品</div>
 						<div class="daily-goods-list">
 							<ul>
-								<li v-for="(goods,index) in oftenGoods" :key="index" @click="addOrderList(goods)">
+								<li v-for="goods in oftenGoods" @click="addOrderList(goods)">
 									<span> {{ goods.foodsName }} </span>
 									<span> ￥{{ goods.price }} 元</span>
 								</li>
@@ -37,7 +53,7 @@
 							<el-tabs>
 								<el-tab-pane label="套餐一">
 									<ul class="cookList">
-										<li v-for="(goods,index) in foods_type" :key="index">
+										<li v-for="goods in foods_type" @click="addOrderList(goods)">
 											<span class="foodImg">
 												<img :src="goods.goodsImg" width='100%'/>
 											</span>
@@ -48,7 +64,7 @@
 								</el-tab-pane>
 								<el-tab-pane label="套餐2">
 									<ul class="cookList">
-										<li v-for="(goods,index) in foods_type1" :key="index">
+										<li v-for="goods in foods_type1" @click="addOrderList(goods)">
 											<span class="foodImg">
 												<img :src="goods.goodsImg" width='100%'/>
 											</span>
@@ -59,7 +75,7 @@
 								</el-tab-pane>
 								<el-tab-pane label="套餐3">
 									<ul class="cookList">
-										<li v-for="(goods,index) in foods_type2" :key="index">
+										<li v-for="goods in foods_type2" @click="addOrderList(goods)">
 											<span class="foodImg">
 												<img :src="goods.goodsImg" width='100%'/>
 											</span>
@@ -70,7 +86,7 @@
 								</el-tab-pane>
 								<el-tab-pane label="套餐4">
 									<ul class="cookList">
-										<li v-for="(goods,index) in foods_type3" :key="index">
+										<li v-for="goods in foods_type3" @click="addOrderList(goods)">
 											<span class="foodImg">
 												<img :src="goods.goodsImg" width='100%'/>
 											</span>
@@ -170,7 +186,9 @@ export default{
 					foodsName:'汉堡xxx66',
 					price:15
 				}
-			]
+			],
+			totalCount : 0,
+			totalMoney : 0
 		}
 	},
 	methods:{
@@ -204,7 +222,33 @@ export default{
 				this.tableData.push( newGoods );
 			}
 
+			this.getAllMoney();
+		},
+		// 删除单个商品
+		delGoods(goods){
+			this.tableData = this.tableData.filter( _g => _g.goodsId != goods.goodsId )
+			this.getAllMoney();
+		},
+		// 总金额计算
+		getAllMoney(){
+			this.totalCount = 0;
+			this.totalMoney = 0;
 
+			if( this.tableData ){
+				this.tableData.forEach( _obj => {
+					this.totalCount += _obj.count;
+					this.totalMoney = this.totalMoney + ( _obj.price * _obj.count);
+				})
+			}
+		},
+		// 模拟结账
+		payMoney(){
+			if( this.totalMoney != 0 ){
+				this.totalCount = 0;
+				this.totalMoney = 0;
+				this.tableData =[];
+				this.$alert('您已结账，欢迎下次再来！', '感谢光临',{});
+			}
 		}
 	}
 }
