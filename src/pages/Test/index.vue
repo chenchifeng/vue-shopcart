@@ -272,7 +272,7 @@ export default {
   height: 20px;
   border-bottom: 1px solid #d3dce6;
   background-color: #f9fafc;
-  text-alien: left;
+  text-align: left;
   padding: 10px;
 }
 .daily-goods-list ul li {
