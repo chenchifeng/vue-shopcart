@@ -1,18 +1,20 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
-    <app-footer></app-footer>
+    <!-- <router-view/> -->
+    <!-- <app-footer></app-footer> -->
+    <test-page></test-page>
   </div>
 </template>
 
 <script>
   // 引入组件
-import AppFooter from '@/components/Footer'
+// import AppFooter from '@/components/Footer'
+import TestPage from '@/pages/Test'
 export default {
   name: 'App',
   components: {
-    AppFooter
+    TestPage
   }
 }
 </script>
